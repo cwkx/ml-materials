@@ -16,6 +16,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torchvision
 import matplotlib.pyplot as plt
+from livelossplot import PlotLosses
 
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
@@ -34,7 +35,7 @@ train_loader = torch.utils.data.DataLoader(
         torchvision.transforms.ToTensor(),
         torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
     ])),
-batch_size=64, drop_last=True)
+shuffle=True, batch_size=64, drop_last=True)
 
 test_loader = torch.utils.data.DataLoader(
     torchvision.datasets.FashionMNIST('data', train=False, download=True, transform=torchvision.transforms.Compose([

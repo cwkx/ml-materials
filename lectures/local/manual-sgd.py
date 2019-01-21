@@ -45,25 +45,21 @@ test_iterator = iter(cycle(test_loader))
 print(f'> Size of training dataset {len(train_loader.dataset)}')
 print(f'> Size of test dataset {len(test_loader.dataset)}')
 
-# define the model
 class SimpleNetwork(nn.Module):
     def __init__(self):
         super(SimpleNetwork, self).__init__()
-        layers = nn.ModuleList()
-        layers.append(nn.Linear(in_features=1024, out_features=512))
-        layers.append(nn.ReLU())
-        layers.append(nn.Linear(in_features=512, out_features=10))
-        self.layers = layers
+        self.l1 = nn.Linear(in_features=1024, out_features=512)
+        self.l2 = nn.Linear(in_features=512, out_features=10)
 
     def forward(self, x):
-        for m in self.layers:
-            x = m(x)
+        x = self.l1(x)
+        x = torch.nn.functional.relu(x)
+        x = self.l2(x)
         return x
 
 N = SimpleNetwork().to(device)
 
 # initialise the optimiser
-optimiser = torch.optim.Adam(N.parameters(), lr=0.001)
 epoch = 0
 
 # train
@@ -80,12 +76,17 @@ while (epoch<100):
         x,t = next(train_iterator)
         x,t = x.to(device), t.to(device)
 
-        optimiser.zero_grad()
+        for p in N.parameters():
+            if p.grad is not None:
+                p.grad.data.zero_()
+
         p = N(x.view(x.size(0), -1))
         pred = p.argmax(dim=1, keepdim=True)
         loss = torch.nn.functional.cross_entropy(p, t)
         loss.backward()
-        optimiser.step()
+        
+        for p in N.parameters():
+            p.data = p.data-0.01*p.grad.data
 
         train_loss_arr = np.append(train_loss_arr, loss.data)
         train_acc_arr = np.append(train_acc_arr, pred.data.eq(t.view_as(pred)).float().mean().item())
