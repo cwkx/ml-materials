@@ -33,7 +33,7 @@ class_names = train_dataset.classes
 train_loader = torch.utils.data.DataLoader(train_dataset,
     batch_size=4, shuffle=True, num_workers=4)
 
-train_loader = torch.utils.data.DataLoader(test_dataset, 
+test_loader = torch.utils.data.DataLoader(test_dataset, 
     batch_size=4, shuffle=False, num_workers=4)
 
 x,label = next(iter(train_loader))
@@ -52,10 +52,11 @@ train_loader = torch.utils.data.DataLoader(
     ])),
 shuffle=True, batch_size=64, drop_last=True)
 
+x,label = next(iter(train_loader))
+x.size()
+
 grid = torchvision.utils.make_grid(x)
 grid = (grid-grid.min())/(grid.max()-grid.min())
 vis.image(grid)
 
-# handling text examples on PyTorch
-#  - tutorials
-#    - text
+# handling text examples on PyTorch.org > tutorials > text
