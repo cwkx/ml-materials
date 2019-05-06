@@ -11,7 +11,7 @@ class ResidualBlock(nn.Module):
        self.conv_block = nn.Sequential(*conv_block)
 
    def forward(self, x):
-       return x + self.conv_block(x)
+       return torch.relu(x + self.conv_block(x))
 
 
 class ConvolutionalNetwork(nn.Module):
