@@ -26,16 +26,14 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 
 train_loader = torch.utils.data.DataLoader(
     torchvision.datasets.FashionMNIST('data', train=True, download=True, transform=torchvision.transforms.Compose([
         torchvision.transforms.Resize(32),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        torchvision.transforms.ToTensor()
     ])),
 shuffle=True, batch_size=64, drop_last=True)
 
 test_loader = torch.utils.data.DataLoader(
     torchvision.datasets.FashionMNIST('data', train=False, download=True, transform=torchvision.transforms.Compose([
         torchvision.transforms.Resize(32),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        torchvision.transforms.ToTensor()
     ])),
 batch_size=64, drop_last=True)
 
