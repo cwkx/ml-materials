@@ -26,16 +26,14 @@ class_names = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress', 'Coat', 'Sandal', 
 train_loader = torch.utils.data.DataLoader(
     torchvision.datasets.FashionMNIST('data', train=True, download=True, transform=torchvision.transforms.Compose([
         torchvision.transforms.Resize(32),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        torchvision.transforms.ToTensor()
     ])),
 shuffle=True, batch_size=64, drop_last=True)
 
 test_loader = torch.utils.data.DataLoader(
     torchvision.datasets.FashionMNIST('data', train=False, download=True, transform=torchvision.transforms.Compose([
         torchvision.transforms.Resize(32),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        torchvision.transforms.ToTensor()
     ])),
 batch_size=64, drop_last=True)
 
@@ -72,7 +70,7 @@ while (epoch<100):
     test_acc_arr = np.zeros(0)
 
     # iterate over some of train dateset
-    for i in range(1000):
+    for i in range(100):
         x,t = next(train_iterator)
         x,t = x.to(device), t.to(device)
 
@@ -88,7 +86,7 @@ while (epoch<100):
         for p in N.parameters():
             p.data = p.data-0.01*p.grad.data
 
-        train_loss_arr = np.append(train_loss_arr, loss.data)
+        train_loss_arr = np.append(train_loss_arr, loss.cpu().data)
         train_acc_arr = np.append(train_acc_arr, pred.data.eq(t.view_as(pred)).float().mean().item())
 
     # iterate entire test dataset
@@ -99,7 +97,7 @@ while (epoch<100):
         loss = torch.nn.functional.cross_entropy(p, t)
         pred = p.argmax(dim=1, keepdim=True)
 
-        test_loss_arr = np.append(test_loss_arr, loss.data)
+        test_loss_arr = np.append(test_loss_arr, loss.cpu().data)
         test_acc_arr = np.append(test_acc_arr, pred.data.eq(t.view_as(pred)).float().mean().item())
 
     # plot metrics
