@@ -55,3 +55,16 @@ x = x.cuda()
 x.device
 x+2
 x.device
+
+# compilation
+@torch.compile
+def process(x):
+    a = x * 2
+    b = a + 3
+    return torch.relu(b)
+
+x = torch.randn(1024, device='cpu')
+y = process(x)  # Warmup (trace, compile, cache, execute)
+y = process(x)  # Cached reuse of compiled code
+print('Compiled output:', y.shape, y.device)
+torch.allclose(y, torch.relu(x * 2 + 3))

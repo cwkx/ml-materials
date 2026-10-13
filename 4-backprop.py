@@ -28,6 +28,6 @@ out # tensor(6., grad_fn=<MeanBackward1>)
 
 x.grad # empty
 
-out.backward()
+out.backward() # traverse graph backwards to propagate and accumulate grads using VJPs 
 
 x.grad 

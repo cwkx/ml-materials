@@ -1,10 +1,9 @@
-import visdom
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torchvision
-from torchvision import datasets, models, transforms
-
-vis = visdom.Visdom(port=12345)
 
 def normalise(x):
     return (x-x.min())/(x.max()-x.min())
@@ -25,9 +24,14 @@ conv = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=3, bias=False)
 
 conv.weight.size()
 
-conv.weight.data = torch.tensor([[-1,0.,1],
-                                 [-2,0.,2],
-                                 [-1,0.,1]]).unsqueeze(0).unsqueeze(0)
+kernel = torch.tensor([[-1., 0., 1.],
+                       [-2., 0., 2.],
+                       [-1., 0., 1.]]).reshape(1, 1, 3, 3)
+with torch.no_grad():
+    conv.weight.copy_(kernel)
 
-vis.image(torchvision.utils.make_grid(normalise(x)))
-vis.image(torchvision.utils.make_grid(normalise(conv(x))))
+grid = torchvision.utils.make_grid(normalise(x))
+plt.imsave('convolution-input.png', grid.permute(1, 2, 0).numpy())
+
+grid = torchvision.utils.make_grid(normalise(conv(x)))
+plt.imsave('convolution-output.png', grid.detach().permute(1, 2, 0).numpy())

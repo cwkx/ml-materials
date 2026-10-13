@@ -1,0 +1,25 @@
+# Colours from the reinforcement-learning gallery and its learning curves.
+font.family: sans-serif
+font.sans-serif: Open Sans, DejaVu Sans
+font.size: 12
+text.color: 36444B
+axes.labelcolor: 36444B
+axes.edgecolor: DDE5E9
+axes.titleweight: medium
+axes.spines.top: False
+axes.spines.right: False
+axes.grid: True
+axes.axisbelow: True
+axes.prop_cycle: cycler('color', ['35837B', '375E86', 'C0392B'])
+xtick.color: 65757D
+ytick.color: 65757D
+grid.color: E2E8EB
+grid.linewidth: 0.8
+lines.linewidth: 2.2
+legend.frameon: False
+figure.facecolor: white
+axes.facecolor: white
+savefig.facecolor: white
+figure.figsize: 7, 4.5
+figure.constrained_layout.use: True
+savefig.dpi: 150
